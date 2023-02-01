@@ -58,7 +58,19 @@ app.post ('api/notes', (req,res) =>{
             text,
             id: uuidv4()
         }
-        
+        fs.readFile('.db/db.json', 'utf-8', (err, data) => {
+            // error if statement
+            if (err) {
+                console.log(err);
+            } else {
+                // we'll need to communicate what to do with the JSON parsed notes
+                const parsedNotes = JSON.parse(data);
+                parsedNotes.push(newNote)
+                fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 4), (err) => {
+                    err ? console.log(err) : console.log('note added')
+                })
+            }
+        })
     }
     
 });
