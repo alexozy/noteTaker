@@ -3,6 +3,7 @@ const express = require('express');
 
 const path = require('path');
 const fs = require("fs");
+const { v4: uuidv4} = require('uuid');
 
 // require notes
 const notes = require('./db/db.json');
@@ -22,8 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // app.get() needs 2 args: 1 -> route 2 -> callback function executed every time
+
 // route to notes.html page
 app.get('/notes', (req,res) => {
+    // Send json to the client 
     res.sendFile(path.join(__dirname,'/public/notes.html'))
 });
 
@@ -34,20 +37,31 @@ app.get('/', (req,res) => {
 });
 
 
+
+// POST request for notes
+app.post ('/notes', (req,res) =>{
+    
+});
+
+// DELETE request for notes
+
+
+
 // How it listens to the connection:
 
 app.listen(PORT, () => {
     console.log(`Current Port : ${PORT}`)
 })
 
-// from class notes this returns JSON instead of strings
-// app.get('/api', (req, res) => res.json(termData));
 
-// app.get('/dennis', (req, res) => {
-//     fs.readFile('./db/db.json', 'utf8', (err) => {
-//         console.log(err)
-//     })
-// })
+
+
+
+
+
+
+
+
 
 
 
