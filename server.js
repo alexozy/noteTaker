@@ -1,18 +1,18 @@
-// Require 
+//Require 
 const express = require('express');
 
 const path = require('path');
 const fs = require("fs");
-const { v4: uuidv4} = require('uuid');
+const uuid = require('uuid');
 
-// require notes
+//require notes
 const notes = require('./db/db.json');
 
-// make the server listen 
+//Make the server listen 
 const PORT = process.env.PORT || 3001;
 //  a port = think coordinates. it gives an exact location
 
-// START express.js; later you can chain methods to this variable easily
+//START express.js; later you can chain methods to this variable easily
 const app = express();
 
 // parses incoming JSON data
@@ -35,7 +35,7 @@ app.get('/notes', (req,res) => {
 });
 
 // we need a GET request for the notes
-app.get('/notes', (req, res) => {
+app.get('api/notes', (req, res) => {
     // Send json to the client 
     fs.readFile('./db/db.json', 'utf-8', (err, data) => {
         if (err) {
@@ -47,33 +47,17 @@ app.get('/notes', (req, res) => {
 });
 
 // POST request for notes
-app.post ('api/notes', (req,res) =>{
-    console.log (`${req.method} requested to add a note`)
-// create a variable for note information
-    const {title, text} =req.body;
-// if statements for notes
-    if(title && text){
-        const newNote = {
-            title,
-            text,
-            id: uuidv4()
-        }
-        fs.readFile('.db/db.json', 'utf-8', (err, data) => {
-            // error if statement
-            if (err) {
-                console.log(err);
-            } else {
-                // we'll need to communicate what to do with the JSON parsed notes
-                const parsedNotes = JSON.parse(data);
-                parsedNotes.push(newNote)
-                fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 4), (err) => {
-                    err ? console.log(err) : console.log('note added')
-                })
-            }
-        })
-    }
-    
-});
+app.post ('api/notes', (req,res) => {
+    console.info(`${req.method} note received`);
+    const newNote = req.body
+    // assign random ID
+    newNote.id = uuid()
+    db.push(newNote)
+
+    // update json file with new
+    fs.writeFileSync('.db/db.json', JSON.stringify(db))
+    res.json(db)
+})
 
 // DELETE request for notes
 
