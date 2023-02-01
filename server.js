@@ -1,6 +1,5 @@
 //Require 
 const express = require('express');
-
 const path = require('path');
 const fs = require("fs");
 const uuid = require('uuid');
@@ -47,17 +46,30 @@ app.get('api/notes', (req, res) => {
 });
 
 // POST request for notes
-app.post ('api/notes', (req,res) => {
-    console.info(`${req.method} note received`);
-    const newNote = req.body
-    // assign random ID
-    newNote.id = uuid()
-    db.push(newNote)
 
-    // update json file with new
-    fs.writeFileSync('.db/db.json', JSON.stringify(notes))
-    res.json(notes)
-})
+app.post('/api/reviews', (req, res) => {
+    console.info(`${req.method} request received to add a note`);
+    // Destructures the contents of req.body
+    const {title, text} = req.body;
+
+    // If all required properties are present then...
+    if (title && text){
+        const genNote = {
+            title,
+            text,
+            id: uuid(),
+        };
+        const response = {
+            status: 'success',
+            body: genNote,
+        };
+
+        console.log(response);
+        res.json(response);
+    } else {
+        res.json('cannot post note');
+    }
+});
 
 // DELETE request for notes
 
