@@ -24,18 +24,27 @@ app.use(express.static('public'));
 
 // app.get() needs 2 args: 1 -> route 2 -> callback function executed every time
 
-// route to notes.html page
-app.get('/notes', (req,res) => {
-    // Send json to the client 
-    res.sendFile(path.join(__dirname,'/public/notes.html'))
-});
-
-
 // GET  API Routes / route to index.html page
 app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, '/public/index.html'))
 });
 
+// route to notes.html page
+app.get('/notes', (req,res) => {
+    res.sendFile(path.join(__dirname,'/public/notes.html'))
+});
+
+// we need a GET request for the notes
+app.get('/notes', (req, res) => {
+    // Send json to the client 
+    fs.readFile('./db/db.json', 'utf-8', (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(JSON.parse(data));
+        }
+    })
+});
 
 // POST request for notes
 app.post ('api/notes', (req,res) =>{
