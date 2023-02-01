@@ -55,8 +55,8 @@ app.post ('api/notes', (req,res) => {
     db.push(newNote)
 
     // update json file with new
-    fs.writeFileSync('.db/db.json', JSON.stringify(db))
-    res.json(db)
+    fs.writeFileSync('.db/db.json', JSON.stringify(notes))
+    res.json(notes)
 })
 
 // DELETE request for notes
