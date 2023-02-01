@@ -37,9 +37,20 @@ app.get('/', (req,res) => {
 });
 
 
-
 // POST request for notes
-app.post ('/notes', (req,res) =>{
+app.post ('api/notes', (req,res) =>{
+    console.log (`${req.method} requested to add a note`)
+// create a variable for note information
+    const {title, text} =req.body;
+// if statements for notes
+    if(title && text){
+        const newNote = {
+            title,
+            text,
+            id: uuidv4()
+        }
+        
+    }
     
 });
 
