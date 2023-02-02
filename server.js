@@ -23,47 +23,38 @@ app.use(express.static('public'));
 
 // app.get() needs 2 args: 1 -> route 2 -> callback function executed every time
 
-// GET  API Routes / route to index.html page
-app.get('/', (req,res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'))
-});
-
-// route to notes.html page
-app.get('/notes', (req,res) => {
-    res.sendFile(path.join(__dirname,'/public/notes.html'))
-});
 
 // we need a GET request for the notes
-app.get('api/notes', (req, res) => {
+app.get('/api/notes', (req, res) => {
     // Send json to the client 
     fs.readFile('./db/db.json', 'utf-8', (err, data) => {
         if (err) {
             console.log(err);
         } else {
-            res.json(JSON.parse(data));
+            res.json(JSON.parse(data).notes);
         }
     })
 });
 
 // POST request for notes
 
-app.post('/api/reviews', (req, res) => {
+app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
     // Destructures the contents of req.body
     const {title, text} = req.body;
-
+    
     // If all required properties are present then...
     if (title && text){
         const genNote = {
             title,
             text,
-            id: uuid(),
+            id: uuid.v4(),
         };
         const response = {
             status: 'success',
             body: genNote,
         };
-
+        
         console.log(response);
         res.json(response);
     } else {
@@ -72,6 +63,19 @@ app.post('/api/reviews', (req, res) => {
 });
 
 // DELETE request for notes
+
+
+
+// route to notes.html page
+app.get('/notes', (req,res) => {
+    res.sendFile(path.join(__dirname,'/public/notes.html'))
+});
+
+// GET  API Routes / route to index.html page
+// '/' should go last
+app.get('/', (req,res) => {
+    res.sendFile(path.join(__dirname, '/public/index.html'))
+});
 
 
 
