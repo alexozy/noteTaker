@@ -31,13 +31,14 @@ app.get('/api/notes', (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            res.json(JSON.parse(data).notes);
+            res.json(JSON.parse(data));
         }
     })
 });
 
-// POST request for notes
-
+// POST request for notes (front-end sending something)
+// req is the request that comes from front-end to back-end
+// res is the response back end sending to front-end | only send one per route. can't run two at once.
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
     // Destructures the contents of req.body
@@ -54,15 +55,29 @@ app.post('/api/notes', (req, res) => {
             status: 'success',
             body: genNote,
         };
-        
-        console.log(response);
-        res.json(response);
+        // Saving the actual note::
+        // we need to readFile in order to get the old notes from the file; add genNote to old notes; writeFile the oldNote+genNotes to db ; res.json()
+        fs.readFile('./db/db.json', 'utf-8', (err, data) => {
+            const oldNotes = JSON.parse(data);
+            // make an array of old & new notes using .push
+            // big.thing(small) | you're pushing small to big
+            oldNotes.push(genNote)
+
+            // writeFile inside of readFile = readFile runs first, then writeFile runs after
+        fs.writeFile('./db/db.json', JSON.stringify(oldNotes), (err,) =>{
+
+            console.log(response);
+            res.json(response);
+
+        })
+        })
+
     } else {
         res.json('cannot post note');
     }
 });
 
-// DELETE request for notes
+// DELETE request for notes **bonus
 
 
 
@@ -90,7 +105,10 @@ app.listen(PORT, () => {
 
 
 
-
+// sending to heroku
+// git remote -v (check to make sure you're connected toheroku)
+// git add
+// git commit 
 
 
 
