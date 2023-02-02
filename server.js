@@ -109,6 +109,8 @@ app.listen(PORT, () => {
 // git remote -v (check to make sure you're connected toheroku)
 // git add
 // git commit 
+// git push heroku master
+// git push origin master
 
 
 
